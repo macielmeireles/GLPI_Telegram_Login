@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Variables - Review and modify as needed
-folder_exec="/www/site/"                   # WebServer - Folder 
-glpi_folder="${folder_exec}glpi"           # GLPI - Folder Install
-bot_token="your_bot_token"                 # Telegram - Bot token
-chat_id="your_chat_id"                     # Telegram - Chat ID
+folder_exec="/www/site/"                     # WebServer - Folder 
+glpi_folder="${folder_exec}glpi"             # GLPI - Folder Install
+bot_token="your_bot_token"                   # Telegram - Bot token
+chat_id="your_chat_id"                       # Telegram - Chat ID
 str_login_success="✅ Login successful: "    # Telegram - Msg ok
 str_login_fail="❌ Login failed: "           # Telegram - Msg fail
 
