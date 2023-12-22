@@ -4,8 +4,7 @@ GLPI | This script automates the setup of a Telegram login feature for GLPI, man
 
 ## Donation | Doações
 (En)      Support our project via Pix or PayPal.<br />
-(Pt-Br) Apoie nosso projeto via Pix ou PayPal:<br /><br />
-
+(Pt-Br) Apoie nosso projeto via Pix ou PayPal:<br />
 Brazilian Pix: d56da244-4dc5-4f77-be6d-28e94fdd46b2<br />
 Paypal: https://bit.ly/MonitTelegram<br />
 
@@ -13,7 +12,7 @@ Paypal: https://bit.ly/MonitTelegram<br />
 - Este script automatiza a instalação e configuração de um recurso de login do Telegram para o GLPI.
 - Ele verifica a versão do GLPI, faz o download de arquivos necessários do GitHub, faz backup do arquivo login.php existente, move os novos arquivos para o diretório correto, concede permissão de execução ao arquivo sendTelegram.sh e substitui variáveis nos arquivos baixados.
 - O script também fornece opções para verificar a versão do GLPI e restaurar o arquivo login.php original.
-<br /><br />
+
 
 ## Description
 - This script automates the installation and configuration of a Telegram login feature for GLPI.
@@ -27,8 +26,6 @@ Paypal: https://bit.ly/MonitTelegram<br />
 3) Edite as variaveis no topo do script, ex: `nano install.sh`
 4) Dê permissão de execução: `chmod +x install.sh`
 5) Execute: `./install.sh`
-
-<br /><br />
 
 ## Installation
 - I will go into detail but basically:
