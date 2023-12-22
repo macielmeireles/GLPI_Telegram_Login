@@ -102,10 +102,10 @@ function get_client_ip() {
 // now we can continue with the process...
 $ip = get_client_ip();
 if ($auth->login($login, $password, (isset($_REQUEST["noAUTO"]) ? $_REQUEST["noAUTO"] : false), $remember, $login_auth)) {
-    shell_exec('/folder_exec/sendTelegram.sh "✅ Login successful:  ' . $login . ' | Source IP : ' . $ip . '"');
+    shell_exec('/$folder_exec/sendTelegram.sh "my_string_sucess ' . $login . ' | Source IP : ' . $ip . '"');
     Auth::redirectIfAuthenticated();
 } else {
-    shell_exec('/folder_exec/sendTelegram.sh "❌ Login failed:  ' . $login . ' | Source IP: ' . $ip . '"');
+    shell_exec('/$folder_exec/sendTelegram.sh "my_string_fail ' . $login . ' | Source IP: ' . $ip . '"');
     http_response_code(401);
     TemplateRenderer::getInstance()->display('pages/login_error.html.twig', [
         'errors'    => $auth->getErrors(),
