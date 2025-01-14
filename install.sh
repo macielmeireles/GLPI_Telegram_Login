@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Version: 0.6
+# Version: 0.7
 # Last updated: 01/14/2025
 # Description: Installation script for GLPI Telegram Login Integration
 
