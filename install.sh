@@ -154,6 +154,10 @@ fi
 mv "$folder_exec/$custom_login_file" "$glpi_folder/front/$custom_login_file"
 mv "$folder_exec/$new_login_file" "$glpi_folder/front/login.php"
 
+# Set correct ownership for the new files
+chown www:www "$glpi_folder/front/$custom_login_file"
+chown www:www "$glpi_folder/front/login.php"
+
 # Replace strings in custom_front_login_with_telegram.php
 sed -i "s|\$folder_exec/sendTelegram.sh \"my_string_sucess|${folder_exec}/sendTelegram.sh \"$str_login_success|g" "$glpi_folder/front/$custom_login_file"
 sed -i "s|\$folder_exec/sendTelegram.sh \"my_string_fail|${folder_exec}/sendTelegram.sh \"$str_login_fail|g" "$glpi_folder/front/$custom_login_file"
