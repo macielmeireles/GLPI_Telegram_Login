@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# Version: 0.5
+# Last updated: 01/14/2025
+# Description: Installation script for GLPI Telegram Login Integration
+
+# Changelog:
+# v0.5 (01/14/2025) - Initial version
+#   - Basic installation setup
+#   - Telegram integration implementation
+#   - Login notification system
+
 # Variables - Review and modify as needed
 folder_exec="/www/site"                      # WebServer - Folder 
 glpi_folder="${folder_exec}/glpi"            # GLPI - Folder Install
