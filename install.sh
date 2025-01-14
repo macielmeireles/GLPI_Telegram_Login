@@ -3,7 +3,7 @@
 # Variables - Review and modify as needed
 folder_exec="/www/site"                      # WebServer - Folder 
 glpi_folder="${folder_exec}/glpi"            # GLPI - Folder Install
-github_url="https://raw.githubusercontent.com/glpi-project/glpi/10.0/bugfixes/front/login.php"
+github_glpi_login_orig="https://raw.githubusercontent.com/glpi-project/glpi/10.0/bugfixes/front/login.php"
 custom_login_file="custom_front_login_with_telegram.php"
 new_login_file="new_front_login.php"
 backup_login_file="login_bak_local.php"      # Base name for the backup
@@ -44,16 +44,12 @@ compare_files() {
 
 # Function to configure sendTelegram.sh
 configure_telegram() {
-    if grep -q "your_token" "$telegram_script" && grep -q "your_chat_id" "$telegram_script"; then
-        read -p "Enter your Telegram bot token: " bot_token
-        read -p "Enter your Telegram chat ID: " chat_id
-        log "Configuring sendTelegram.sh with provided credentials..."
-        sed -i "s/your_token/$bot_token/g" "$telegram_script"
-        sed -i "s/your_chat_id/$chat_id/g" "$telegram_script"
-        log "Configuration completed."
-    else
-        log "sendTelegram.sh is already configured. Skipping configuration."
-    fi
+    read -p "Enter your Telegram bot token: " bot_token
+    read -p "Enter your Telegram chat ID: " chat_id
+    log "Configuring sendTelegram.sh with provided credentials..."
+    sed -i "s/your_bot_token/$bot_token/g" "$telegram_script"
+    sed -i "s/your_chat_id/$chat_id/g" "$telegram_script"
+    log "Configuration completed."
 }
 
 # Function to display help
@@ -66,6 +62,18 @@ Options:
   --restore     Restore the login.php file from the official repository.
   --help        Display this help message.
 EOF
+}
+
+# Function to create incremental backup
+create_incremental_backup() {
+    local base_name="$1"
+    local ext="$2"
+    local count=1
+    while [ -f "${base_name}.${count}${ext}" ]; do
+        count=$((count + 1))
+    done
+    mv "$base_name$ext" "${base_name}.${count}${ext}"
+    log "Backup created as ${base_name}.${count}${ext}."
 }
 
 # Check dependencies
@@ -81,7 +89,7 @@ case "$1" in
         exit 0
         ;;
     --check)
-        download_file "$github_url" "$folder_exec/login_github.php"
+        download_file "$github_glpi_login_orig" "$folder_exec/login_github.php"
         if compare_files "$glpi_folder/front/login.php" "$folder_exec/login_github.php"; then
             log "The local login.php file matches the official GLPI login.php file. It is safe to proceed."
             exit 0
@@ -91,7 +99,7 @@ case "$1" in
         fi
         ;;
     --restore)
-        download_file "$github_url" "$glpi_folder/front/login.php"
+        download_file "$github_glpi_login_orig" "$glpi_folder/front/login.php"
         log "login.php file restored."
         exit 0
         ;;
@@ -111,8 +119,6 @@ if [ ! -f "$telegram_script" ]; then
     download_file "$telegram_github_url" "$telegram_script"
     chmod +x "$telegram_script"
     configure_telegram
-else
-    configure_telegram
 fi
 
 # Download custom login files from GitHub
@@ -121,8 +127,17 @@ download_file "https://raw.githubusercontent.com/macielmeireles/glpi_sendTelegra
 
 # Backup the local login.php file, if it exists
 if [ -f "$glpi_folder/front/login.php" ]; then
-    mv "$glpi_folder/front/login.php" "$glpi_folder/front/$backup_login_file"
-    log "Backup of the original login.php created as $backup_login_file."
+    if [ -f "$glpi_folder/front/$backup_login_file" ]; then
+        download_file "$github_glpi_login_orig" "$folder_exec/login_github.php"
+        if compare_files "$glpi_folder/front/$backup_login_file" "$folder_exec/login_github.php"; then
+            log "The existing backup login_bak_local.php matches the official GLPI login.php file. No new backup needed."
+        else
+            create_incremental_backup "$glpi_folder/front/login_bak_local" ".php"
+        fi
+    else
+        mv "$glpi_folder/front/login.php" "$glpi_folder/front/$backup_login_file"
+        log "Backup of the original login.php created as $backup_login_file."
+    fi
 fi
 
 # Move new files to the correct directory
